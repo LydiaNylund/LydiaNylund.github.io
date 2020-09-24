@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+}
+.page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.row {
+    border-bottom: 1px solid #eeeeee;
+    flex-basis: 100%;
+}
+.toolbar {
+    background-color: royalblue;
+    border-bottom: 1px solid #eeeeee;
+    flex-basis: 100%;
+}
+#buttons {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.button {
+    width: 4rem;
+    height: 2rem;
+    margin-left: 1rem;
+}
