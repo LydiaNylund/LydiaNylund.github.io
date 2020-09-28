@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(31, 31, 34);
+    color: rgb(230, 230, 230);
+}
+#page {
+    width: 30%;
+}
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button {
+    margin: 1rem;
+    text-decoration: none;
+    background-color: gray;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    color: rgb(230, 230, 230);
+}
