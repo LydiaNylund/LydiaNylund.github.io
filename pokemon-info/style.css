@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    background-color: rgb(49, 49, 51);
+    color: white;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.inputContainer {
+    margin-bottom: 1rem;
+}
+#pokemonInput {
+    background-color: rgb(49, 49, 51);
+    color: white;
+    border: none;
+    background-color:  rgb(33, 33, 34);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+#button {
+    text-decoration: none;
+    color: white;
+    background-color:  rgb(33, 33, 34);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    margin-left: 1rem;
+}
+.pics {
+    display: flex;
+}
+.over {
+    text-decoration: line-through;
+    color: rgb(110, 5, 5);
+}
+.big {
+    text-decoration: none;
+    font-size: 4rem;
+    color: rgb(224, 15, 15);
+    text-shadow: rgb(20, 1, 1) 2px 2px;
+    font-family: chiller;
+}
