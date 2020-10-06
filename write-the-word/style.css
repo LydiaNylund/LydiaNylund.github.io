@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    color: rgb(230, 230, 230);
+    font-size: 5rem;
+    background-color: rgb(34, 35, 39);
+}
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.pressed {
+    color: black;
+}
+.current {
+    transform: translateY(-20px);
+    color: rgb(150, 150, 150);
+    display: inline-block;
+}
+#timeOutput {
+    font-size: 3rem;
+}
+#retryButton {
+    background-color: rgb(88, 88, 88);
+    color: rgb(221, 221, 221);
+    padding: 1rem;
+    border-radius: 2rem;
+    border-width: 0;
+    margin-top: 5rem;
+    font-size: 2rem;
+}
+.hide {
+    display: none;
+}

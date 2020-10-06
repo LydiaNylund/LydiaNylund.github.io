@@ -9,10 +9,18 @@
 <body>
     
     <div class="page">
-        <div class="inputContainer">
-            <input type="text" id="pokemonInput">
-            <a href="#" id="button"> Search </a>
-        </div>
+
+        <h1>Pokemon Search</h1>
+
+        <form id="form">
+            <div class="inputContainer">
+                <input type="text" id="pokemonInput">
+                <button type="submit" id="button"> Search </button>
+            </div>
+        </form>
+
+
+        <div id="loader"></div>
         
         <div id="infoContainer">
             <div id="name"> </div>
@@ -20,8 +28,13 @@
             <div id="weight"> </div>
             <div id="type"> </div>
             <div class="pics">
-                <div id="frontPic"> </div>
-                <div id="backPic"> </div>
+                <div class="picBg">
+                    <div id="frontPic"> </div>
+                </div>
+                <div class="picBg">
+                    <div id="backPic"> </div>
+                </div>
+                
             </div>
         </div>
         <div id="still"></div>

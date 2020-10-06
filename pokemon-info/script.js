@@ -3,6 +3,8 @@ const searchButton = document.getElementById("button");
 let doYou;
 const info = document.getElementById("infoContainer");
 const still = document.getElementById("still");
+let loader = document.getElementById("loader");
+const form = document.getElementById("form");
 
 let name = document.getElementById("name");
 let pokeHeight = document.getElementById("height");
@@ -10,10 +12,21 @@ let pokeWeight = document.getElementById("weight");
 let pokeType = document.getElementById("type");
 let frontPic = document.getElementById("frontPic");
 let backPic = document.getElementById("backPic");
+let picBg = document.getElementsByClassName("picBg");
 
-searchButton.addEventListener("click", onSearchButtonClicked);
+loader.classList.add("hide");
 
-function onSearchButtonClicked() {
+form.addEventListener("submit", onSearchButtonClicked);
+
+function onSearchButtonClicked(e) {
+    e.preventDefault();
+    let i = 0;
+    while(i<picBg.length) {
+        picBg[i].classList.add("border");
+        i++;
+    }
+    loader.classList.remove("hide");
+
     if(pokemonInput.value == "BRVR") {
         player();
     }
@@ -26,24 +39,39 @@ function onSearchButtonClicked() {
         .then(data => getInfo(data))
     }
 
+
 }
 
 function getInfo(data) {
+    console.log(data)
+
+    loader.classList.add("hide");
     if(doYou) {
         info.classList.remove("over");
         still.removeChild(doYou);
     }
+    
 
     name.innerHTML = `Name: ${data.name}`
     pokeHeight.innerHTML = `Height: ${data.height}`;
     pokeWeight.innerHTML = `Weight: ${data.weight}`;
-    pokeType.innerHTML = `Type: ${data.types[0].type.name}`;
+
+    pokeType.innerHTML = `Type: `;
+    let i = 0;
+    while(i<data.types.length) {
+        pokeType.innerHTML += `${data.types[i].type.name} `;
+        i++;
+    }
+   
     frontPic.innerHTML = `<img src="${data.sprites.front_default}"></img>`;
     backPic.innerHTML = `<img src="${data.sprites.back_default}"></img>`;
 
 }
+
+
 function player() {
 
+    loader.classList.add("hide");
     info.classList.add("over");
     console.log(info)
 
