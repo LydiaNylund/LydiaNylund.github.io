@@ -22,6 +22,8 @@ retryButton.classList.add("hide");
 
 retryButton.addEventListener("click", retryButtonClicked);
 
+
+
 function renderWord() {
     letter = 0;
     let i = 0;
@@ -37,7 +39,7 @@ function renderWord() {
 
 
 function onKeyDown(event) {
-    if( word === words.length && keyPressed == lastCharac) {
+    if( word === words.length && keyPressed === lastCharac) {
         retryButton.classList.remove("hide");
         currentTime = new Date();
         stopTime = currentTime.getTime();
@@ -45,6 +47,9 @@ function onKeyDown(event) {
         let millisec = (stopTime - startTime) / 1000;
 
         timeOutput.innerHTML = `Det tog ${millisec.toFixed(2)} sekunder att skriva orden.`;
+        newWord()
+        currentLetter()
+        return;
     }
 
 
