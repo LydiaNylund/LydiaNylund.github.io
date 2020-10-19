@@ -1,7 +1,7 @@
 const outputTemp = document.getElementById("outputTemp");
 const weatherOutput = document.getElementById("weatherOutput");
 
-fetch('http://api.openweathermap.org/data/2.5/weather?q=Jakobstad&appid=6d94ae8d87b74829c97d37d4f5d45bb7&units=metric')
+fetch('http://api.openweathermap.org/data/2.5/weather?q=Solf&appid=6d94ae8d87b74829c97d37d4f5d45bb7&units=metric')
   .then(response => response.json())
   .then(data => getData(data))
 
