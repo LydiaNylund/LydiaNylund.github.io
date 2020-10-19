@@ -19,7 +19,7 @@ window.addEventListener("keydown", keyDown);
 window.requestAnimationFrame(renderCircle) 
 
 function renderCircle() {
-    c.clearRect(0, 0, window.innerHeight, window.innerWidth);
+    c.clearRect(0, 0, canvas.width, canvas.height);
     c.beginPath();
     c.arc(x, y, 40, 0, Math.PI * 2, false);
     c.fillStyle = "crimson";
