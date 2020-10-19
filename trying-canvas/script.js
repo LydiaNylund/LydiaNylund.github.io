@@ -7,8 +7,8 @@ let right;
 let up;
 let down;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = 800;
+canvas.height = 600;
 
 let c = canvas.getContext("2d");
 
