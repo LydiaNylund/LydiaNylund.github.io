@@ -28,13 +28,13 @@ function renderCircle() {
     if(left === true) {
         x--;
     }
-    else if(right === true) {
+    if(right === true) {
         x++;
     }
-    else if(up === true) {
+    if(up === true) {
         y--;
     }
-    else if(down === true) {
+    if(down === true) {
         y++;
     }
  
