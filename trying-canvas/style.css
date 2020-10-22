@@ -11,8 +11,6 @@ body {
 }
 canvas {
     border: 1px solid black;
-    width: 800px;
-    height: 600px;
 }
 .counter {
     position: absolute;
@@ -23,6 +21,7 @@ canvas {
     position: absolute;
     font-size: 6rem;
     color: rgb(8, 7, 5);
+    text-shadow: 2px 2px rgb(121, 110, 110);
     top: 30%;
 }
 #gameOverMessage {
