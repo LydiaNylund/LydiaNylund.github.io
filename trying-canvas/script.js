@@ -38,9 +38,12 @@ const playerWidth = 75;
 
 const coinImg = new Image();
 coinImg.src = "coinImg.png";
-const coinHeight = 46;
+const coinHeight = 45;
 const coinWidth = 42;
-
+let prevTimestamp = 0;
+let currentFrame = 0;
+let currentEnemyFrame = 0;
+let currentCoinFrame = 0;
 
 
 
@@ -53,7 +56,6 @@ let lastFrameTime = new Date();
 window.addEventListener("load", () => {
     window.requestAnimationFrame(renderCircle);
 })
-let prevTimestamp = 0;
 
 function renderCircle(timestamp) {
 
@@ -69,7 +71,7 @@ function renderCircle(timestamp) {
     c.drawImage(
         playerImg, 
         0,
-        0, 
+        playerWidth * (Math.floor(currentFrame) % 2), 
         playerWidth,
         playerHeight,  
         player.x - player.radius *2 + player.radius /2, 
@@ -97,7 +99,7 @@ function renderCircle(timestamp) {
 
     if(moveDirection.x != 0 || moveDirection.y != 0) {
             // normalizer x och y ti vara total längd 1.
-        moveDirection = normalize2d(moveDirection.x, moveDirection.y);
+        moveDirection = normalize2d(moveDirection.x, moveDirection.y, currentFrame += 0.2);
         
         // Sen använder du den såhär:
         const hastighet = 90;
@@ -125,7 +127,7 @@ function renderCircle(timestamp) {
     c.drawImage(
         coinImg, 
         0,
-        0, 
+        coinHeight * (Math.floor(currentCoinFrame) % 4), 
         coinWidth,
         coinHeight,  
         coin.x - coin.radius *2 - coin.radius /5, 
@@ -141,24 +143,13 @@ function renderCircle(timestamp) {
         points++;
     }
     
-
-    /*if(points == 10) {
-        speed = 50;
-    }
-    if(points == 25) {
-        speed = 70;
-    }
-    if(points == 35) {
-        speed = 90;
-    }*/
-
-
+    currentCoinFrame += 0.1;
 
     enemy.draw();      
     c.drawImage(
         enemyImg, 
         0,
-        0, 
+        enemyHeight  * (Math.floor(currentEnemyFrame) % 2),
         enemyWidth,
         enemyHeight,  
         enemy.x - enemy.radius *2 + enemy.radius /2 , 
@@ -174,11 +165,13 @@ function renderCircle(timestamp) {
     enemyMoveDirection.x = player.x - enemy.x;
     enemyMoveDirection.y = player.y - enemy.y;
 
-    enemyMoveDirection = normalize2d(enemyMoveDirection.x, enemyMoveDirection.y);
+    enemyMoveDirection = normalize2d(enemyMoveDirection.x, enemyMoveDirection.y, currentEnemyFrame += 0.1);
     
     const enemyHastighet = minEnemySpeed + Math.min(points * 2, maxEnemySpeed - minEnemySpeed);
     enemy.x += enemyMoveDirection.x * enemyHastighet * deltaTime;
     enemy.y += enemyMoveDirection.y * enemyHastighet * deltaTime;
+
+
 
     if(player.overlaps(enemy)) {
         onGameOver();
