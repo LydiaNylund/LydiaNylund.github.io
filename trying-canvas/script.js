@@ -18,31 +18,45 @@ let c = canvas.getContext("2d");
 window.addEventListener("keyup", keyUp);
 window.addEventListener("keydown", keyDown);
 
-let player = new Circle(200, 200, 25, "transparent");
-let coin = new Circle(400, 300, 10, "transparent");
-let enemy = new Circle(300, 400, 40, "transparent");
 let points = 0;
 let isGameOver = false;
-let maxEnemySpeed = 90;
-let minEnemySpeed = 20;
 
+let enemy = new Circle(300, 400, 40, "transparent");
 const enemyImg = new Image();
 enemyImg.src = 'enemyImg.png';
 const enemyHeight = 128;
 const enemyWidth = 128;
+let maxEnemySpeed = 90;
+let minEnemySpeed = 20;
+let enemyTargetX = 50 + Math.random() *(canvas.width - 100);
+let enemyTargetY = 50 + Math.random() *(canvas.height - 100);
 
+let enemy2 = new Circle(700, 50, 30, "yellow");
+const enemy2Img = new Image();
+enemy2Img.src = 'enemy2Img.png';
+const enemy2Height = 128;
+const enemy2Width = 128;
+let maxEnemy2Speed = 70;
+let minEnemy2Speed = 30;
+let enemy2TargetX = 50 + Math.random() *(canvas.width - 100);
+let enemy2TargetY = 50 + Math.random() *(canvas.height - 100);
+
+let player = new Circle(200, 200, 25, "transparent");
 const playerImg = new Image();
 playerImg.src = "playerImg.png";
 const playerHeight = 75;
 const playerWidth = 75;
 
+let coin = new Circle(400, 300, 10, "transparent");
 const coinImg = new Image();
 coinImg.src = "coinImg.png";
 const coinHeight = 45;
 const coinWidth = 42;
+
 let prevTimestamp = 0;
 let currentFrame = 0;
 let currentEnemyFrame = 0;
+let currentEnemy2Frame = 0;
 let currentCoinFrame = 0;
 
 
@@ -161,9 +175,8 @@ function renderCircle(timestamp) {
 
     let enemyMoveDirection = { x: 0, y: 0 };
     
-
-    enemyMoveDirection.x = player.x - enemy.x;
-    enemyMoveDirection.y = player.y - enemy.y;
+    enemyMoveDirection.x = enemyTargetX - enemy.x;
+    enemyMoveDirection.y = enemyTargetY - enemy.y;
 
     enemyMoveDirection = normalize2d(enemyMoveDirection.x, enemyMoveDirection.y, currentEnemyFrame += 0.1);
     
@@ -171,9 +184,86 @@ function renderCircle(timestamp) {
     enemy.x += enemyMoveDirection.x * enemyHastighet * deltaTime;
     enemy.y += enemyMoveDirection.y * enemyHastighet * deltaTime;
 
+    let enemyTargetDistanceX =enemyTargetX - enemy.x;
+    let enemyTargetDistanceY = enemyTargetY - enemy.y;
 
+
+    if(enemyTargetDistanceX < 10 && enemyTargetDistanceY < 50) {
+        enemyTargetX = 50 + Math.random() * (canvas.width - 100);
+        enemyTargetY = Math.random() * (canvas.height - 100);
+    }
+
+    enemy2.draw();
+    c.drawImage(
+        enemy2Img, 
+        0,
+        enemy2Height  * (Math.floor(currentEnemy2Frame) % 2),
+        enemy2Width,
+        enemy2Height,  
+        enemy2.x - enemy2.radius *2, 
+        enemy2.y - enemy2.radius *2 - enemy2.radius /2 ,  
+        enemy2Width,
+        enemy2Height,
+    );
+
+
+    let enemy2MoveDirection = { x: 0, y: 0 };
+
+    enemy2MoveDirection.x = enemy2TargetX - enemy2.x;
+    enemy2MoveDirection.y = enemy2TargetY - enemy2.y;
+
+    enemy2MoveDirection = normalize2d(enemy2MoveDirection.x, enemy2MoveDirection.y, currentEnemy2Frame += 0.1);
+    
+    const enemy2Hastighet = minEnemy2Speed + Math.min(points, maxEnemy2Speed - minEnemy2Speed);
+    enemy2.x += enemy2MoveDirection.x * enemy2Hastighet * deltaTime;
+    enemy2.y += enemy2MoveDirection.y * enemy2Hastighet * deltaTime;
+
+
+    if(distance(enemy2.x, enemy2.y, enemy.x, enemy.y) < 150) {
+        const directionToOtherEnemey = direction(enemy2.x, enemy2.y, enemy.x, enemy.y);
+        enemy2.x += directionToOtherEnemey.x * enemy2Hastighet;
+        enemy2.y += directionToOtherEnemey.y * enemy2Hastighet;
+    }
+
+
+    if(distance(player.x, player.y, enemy.x, enemy.y) < distance(player.x, player.y, enemy2.x, enemy2.y)) {
+        enemyTargetX = player.x;
+        enemyTargetY = player.y;
+    }
+    else {
+        enemy2TargetX = player.x;
+        enemy2TargetY = player.y;
+    }
+
+    
+
+
+    if(enemy2.x > 800 - enemy2.radius) {
+        enemy2.x = 800 - enemy2.radius;
+    }
+    if(enemy2.y > 600 - enemy2.radius) {
+        enemy2.y = 600 - enemy2.radius;
+    }
+    if(enemy2.x < 0 + enemy2.radius) {
+        enemy2.x = 0 + enemy2.radius;
+    }
+    if(enemy2.y < 0 + enemy2.radius) {
+        enemy2.y = 0 + enemy2.radius;
+    }
+
+    let enemy2TargetDistanceX =enemy2TargetX - enemy2.x;
+    let enemy2TargetDistanceY = enemy2TargetY - enemy2.y;
+
+
+    if(enemy2TargetDistanceX < 10 && enemy2TargetDistanceY < 50) {
+        enemy2TargetX = 50 + Math.random() * (canvas.width - 100);
+        enemy2TargetY = 50 + Math.random() * (canvas.height - 100);
+    }
 
     if(player.overlaps(enemy)) {
+        onGameOver();
+    }
+    else if(player.overlaps(enemy2)) {
         onGameOver();
     }
     else if(isGameOver === false) {
@@ -183,7 +273,17 @@ function renderCircle(timestamp) {
 
 }
 
-
+function distance(x1, y1, x2, y2) {
+    const dx = x1 - x2;
+    const dy = y1 - y2;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  function direction(x1, y1, x2, y2) {
+    const dx = x1 - x2;
+    const dy = y1 - y2;
+    return normalize2d(dx, dy);
+  }
 
 
 function keyDown(event) {
@@ -234,6 +334,13 @@ function pressSpace(event) {
         enemy.y = 400;
         coin.x = 400;
         coin.y = 300;
+        enemy2.x = 700;
+        enemy2.y = 50;
+
+        enemyTargetX = 50 + Math.random() *(canvas.width - 100);
+        enemyTargetY = 50 + Math.random() *(canvas.width - 100);
+        enemy2TargetX = 50 + Math.random() *(canvas.width - 100);
+        enemy2TargetY = 50 + Math.random() *(canvas.width - 100);
 
         points = 0;
         isGameOver = false;
@@ -289,6 +396,18 @@ function onGameOver() {
         enemy.y - enemy.radius *2 + enemy.radius /2 ,  
         enemyWidth,
         enemyHeight,
+    );
+    enemy2.draw();
+    c.drawImage(
+        enemy2Img, 
+        128,
+        0,
+        enemy2Width,
+        enemy2Height,  
+        enemy2.x - enemy2.radius *2, 
+        enemy2.y - enemy2.radius *2 - enemy2.radius /2 ,  
+        enemy2Width,
+        enemy2Height,
     );
 
     window.addEventListener("keydown", pressSpace);
