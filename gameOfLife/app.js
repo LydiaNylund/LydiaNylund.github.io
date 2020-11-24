@@ -1,6 +1,7 @@
 const canvasElement = document.getElementById("canvas");
 const startButton = document.getElementById("startButton");
 const stopButton = document.getElementById("stopButton");
+const clearButton = document.getElementById("clearButton");
 
 
 const canvas = canvasElement.getContext("2d");
@@ -17,11 +18,16 @@ let cellCopy = [];
 
 canvasElement.width = rowCount * cellSize;
 canvasElement.height = columnCount *  cellSize;
+canvasElement.style.border = "1px solid grey";
 
+startButton.style.border = "1px solid grey"
+stopButton.style.border = "1px solid grey"
+clearButton.style.border = "1px solid grey"
 
 
 startButton.addEventListener("click", startButtonClicked);
 stopButton.addEventListener("click", stopButtonClicked);
+clearButton.addEventListener("click", clearButtonClicked);
 canvasElement.addEventListener("click", whenClicked);
 
 killAllCells();
@@ -150,10 +156,21 @@ function copyCells() {
 
 function startButtonClicked() {
     stopping = false;
-    start = setInterval(loop, 500);  
+    start = setInterval(loop, 500);
+    startButton.style.background = "grey";
+    stopButton.style.background = "white";    
 }
 
 function stopButtonClicked() {
+    stopButton.style.background = "grey"; 
+    startButton.style.background = "white";  
     stopping = true;
     clearInterval(start);
+}
+
+function clearButtonClicked() {
+    startButton.style.background = "white";  
+    stopButton.style.background = "white";  
+    killAllCells();
+    loop();
 }
