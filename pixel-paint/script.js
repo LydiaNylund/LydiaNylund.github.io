@@ -33,9 +33,7 @@ while(i<gridCount * gridCount) {
 
 function onSelectColor(e) {
     e.preventDefault();
-    if(selectedColorElement) {
-        selectedColorElement.classList.remove('--selected');
-    }
+    c
     selectedColorElement = e.target;
     selectedColorElement.classList.add("--selected");
 }
