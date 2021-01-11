@@ -4,7 +4,7 @@ const c = canvasElement.getContext("2d");
 
 canvasElement.height = 600;
 canvasElement.width = 800;
-canvasElement.style.backgroundColor = "lightblue";
+canvasElement.style.backgroundColor = "black";
 
 let key;
 let left;
@@ -14,22 +14,22 @@ let up;
 
 let prevTimestamp = 0;
 let velocity = { x: 0, y: 0 };
-let velocityWall = { x: 0, y: 0 };
 let gravity = 700;
 let isGrounded = false;
 let deltaTime;
 let damping = 4;
 
-let ground = new Box(0, 520, 400, 80,"green");
-let ground2 = new Box(470, 520, 400, 80, "green");
-let block = new Box(200, 400, 80, 120,"brown");
-let block2 = new Box(600, 120, 80, 400,"brown");
-let block3 = new Box(0, 0, 80, 520,"brown");
-let platform = new Box(80, 40, 60, 20,"brown");
-let platform2 = new Box(240, 50, 120, 20,"brown");
-let platform3 = new Box(460, 80, 80, 20,"brown");
+let ground = new Box(0, 520, 400, 80," rgb(85, 85, 85)");
+let ground2 = new Box(470, 520, 400, 80, " rgb(85, 85, 85)");
+let block = new Box(200, 400, 80, 120," rgb(85, 85, 85)");
+let block2 = new Box(600, 120, 80, 400," rgb(85, 85, 85)");
+let block3 = new Box(0, 0, 80, 520," rgb(85, 85, 85)");
+let platform = new Box(80, 100, 60, 20," rgb(85, 85, 85)");
+let platform2 = new Box(240, 160, 120, 40," rgb(85, 85, 85)");
+let platform3 = new Box(460, 80, 80, 20," rgb(85, 85, 85)");
 
 let player = new Box(100, 470, 30, 40, "red");
+let goal = new Box(90, 90, 10, 10, "white");
 
 const playerCollidesWith = [
         ground,
@@ -39,7 +39,7 @@ const playerCollidesWith = [
         block3,
         platform,
         platform2,
-        platform3
+        platform3,
     ];
 
 
@@ -89,7 +89,6 @@ function loop(timestamp) {
     }
     playerMoveY(velocity.y * deltaTime);
     playerMoveX(velocity.x * deltaTime);
-    playerMoveX(velocityWall.x * deltaTime);
 
     if(player.x < 0){
         player.x = 0;
@@ -101,6 +100,11 @@ function loop(timestamp) {
         player.y = 470;
         player.x = 100;
     }
+    if(player.y < 0){
+        player.y = 0;
+    }
+
+    touchGoal(goal);
 
     //
     // draw
@@ -118,7 +122,7 @@ function loop(timestamp) {
     platform3.draw();
 
     player.draw();
-
+    goal.draw();
 
 
 }
@@ -175,6 +179,7 @@ function playerMoveX(distance) {
     for(let i = 0; i < playerCollidesWith.length; i++) {
         const other = playerCollidesWith[i];
         if(player.overlaps(other)) {
+            velocity.y = -12;
             if(player.x < other.x) {
                 player.x = other.x - player.width -0.1;
                 if(up) {
@@ -190,5 +195,12 @@ function playerMoveX(distance) {
                 }
             }
         }
+    }
+}
+
+function touchGoal(goal) {
+    if(player.overlaps(goal)) {
+        player.x = 100;
+        player.y = 470;
     }
 }

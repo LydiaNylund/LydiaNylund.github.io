@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+}
+.page {
+    text-align: center;
+}
+.numbers {
+    display: flex;
+}
+.numberAndLock {
+    margin-left: 2rem;
+}
+.locks {
+    display: flex;
+    font-size: 2rem;
+}
+#spin {
+    margin-top: 2rem;
+    font-size: 3rem;
+}
