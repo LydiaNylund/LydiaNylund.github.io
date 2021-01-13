@@ -1,79 +1,46 @@
-const number1Output = document.getElementById("number1");
-const number2Output = document.getElementById("number2");
-const number3Output = document.getElementById("number3");
+let numberOfNumbers = 5;
 
-const lockButton1 = document.getElementById("lock1");
-const lockButton2 = document.getElementById("lock2");
-const lockButton3 = document.getElementById("lock3");
-
+const numbersOutput = document.getElementById("numbers");
+const locksOutput = document.getElementById("locks");
 const spinButton = document.getElementById("spin");
 
-let is1Locked;
-let is2Locked;
-let is3Locked;
-
-
 spinButton.addEventListener("click", spinButtonClicked);
-lockButton1.addEventListener("click", lockButtonClicked);
-lockButton2.addEventListener("click", lockButtonClicked);
-lockButton3.addEventListener("click", lockButtonClicked);
 
+let numberArray = [];
+for(let i = 0; i < numberOfNumbers; i++) {    
+    numberArray.push({
+        num: 0,
+        locked: false,
+        button: document.createElement("button"),
+        display: document.createElement("div")
+    });
+    numberArray[i].button.textContent = "Lock";
+    numberArray[i].button.addEventListener("click", lockButtonClicked);
+    locksOutput.appendChild(numberArray[i].button);
 
-
-spinButtonClicked();
-
-
-
-function spinButtonClicked() {
-    if(!is1Locked === true) {
-        number = Math.floor(Math.random() * 10);
-        number1Output.innerHTML = number;
-    }
-    if(!is2Locked === true) {
-        number = Math.floor(Math.random() * 10);
-        number2Output.innerHTML = number;
-    }
-
-    if(!is3Locked === true) {
-        number = Math.floor(Math.random() * 10);
-        number3Output.innerHTML = number;
-    }
-     
+    numberArray[i].display.innerHTML = numberArray[i].num;
+    numbersOutput.appendChild(numberArray[i].display);
 }
 
-function lockButtonClicked(event) {
-    let lockSelected = event.target;
-    
-    if(lockSelected === lockButton1) {
-        if(is1Locked === true) {
-            number1Output.style.color = "black";
-            is1Locked = false;
+function spinButtonClicked() {
+    for(let i = 0; i < numberOfNumbers; i++) {
+        if(!numberArray[i].locked) {
+            numberArray[i].num = (Math.floor(Math.random() * 10));
+            numberArray[i].display.innerHTML = numberArray[i].num;
         }
-        else {
-            number1Output.style.color = "grey";
-            is1Locked = true;
-        }
+    }
+}
 
-    }
-    if(lockSelected === lockButton2) {
-        if(is2Locked === true) {
-            number2Output.style.color = "black";
-            is2Locked = false;
-        }
-        else {
-            number2Output.style.color = "grey";
-            is2Locked = true;
-        }
-    }
-    if(lockSelected === lockButton3) {
-        if(is3Locked === true) {
-            number3Output.style.color = "black";
-            is3Locked = false;
-        }
-        else {
-            number3Output.style.color = "grey";
-            is3Locked = true;
+function lockButtonClicked(event) {   
+    for(let i = 0; i < numberOfNumbers; i++) {
+        if(event.target === numberArray[i].button) {
+            numberArray[i].locked = !numberArray[i].locked;
+            if(numberArray[i].display.style.color === "grey") {
+                numberArray[i].display.style.color = "black";
+            }
+            else {
+                numberArray[i].display.style.color = "grey";
+            }
         }
     }
-
 }

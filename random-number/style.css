@@ -7,13 +7,12 @@ body {
     font-size: 5rem;
 }
 .page {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 .numbers {
     display: flex;
-}
-.numberAndLock {
-    margin-left: 2rem;
 }
 .locks {
     display: flex;
