@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#text {
+    position: absolute;
+    font-size: 4rem;
+}
+#counter {
+    position: absolute;
+    top: 1rem;
+    left: 19rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+#progressBar {
+    width: 24rem;
+    height: 0.5rem;
+    border: rgb(126, 126, 126) 1px solid;
+    position: absolute;
+    top: 2rem;
+    border-radius: 1rem;
+}
+#bar {
+    background-color: rgb(255, 174, 0);
+    width: 0%;
+    height: 0.5rem;
+    border-radius: 1rem;
+}
