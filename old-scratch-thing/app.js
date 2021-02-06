@@ -124,6 +124,7 @@ function gameLoop(timestamp) {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
     
+    enemy.displayRadius += (enemy.radius - enemy.displayRadius) * 0.1;
     enemy.draw();
 
     if(player.overlaps(food)) {
