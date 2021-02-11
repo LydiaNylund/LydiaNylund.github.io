@@ -6,6 +6,7 @@ const bar = document.getElementById("bar");
 const timer = document.getElementById("timer");
 const highscoreElement = document.getElementById("highscore");
 const deleteButton = document.getElementById("clearscore");
+const timetrialButton = document.getElementById("timetrialButton");
 
 const c = canvasElement.getContext("2d");
 
@@ -51,10 +52,13 @@ let progress = 100 / playerColors.length;
 
 let score;
 let highscore = getHighscore();
-console.log(localStorage);
 highscoreElement.innerHTML = highscore.substring(0,2) + ":" + highscore.substring(2,4) + ":" + highscore.substring(4,7);
 highscore = 999999;
 
+let timetrial = false;
+let lose = false;
+
+timetrialButton.addEventListener("click", timetrialButtonClicked);
 deleteButton.addEventListener("click", deleteScore);
 canvasElement.addEventListener("click", onMouseClick);
 canvasElement.addEventListener("mousemove", onMouseMovement);
@@ -171,7 +175,7 @@ function gameLoop(timestamp) {
     player.draw();
     
 
-    if(player.overlaps(enemy) && player.radius < enemy.radius) {
+    if(player.overlaps(enemy) && player.radius < enemy.radius || lose) {
         gameOver();
     }
     else if(player.overlaps(enemy) && player.radius >= enemy.radius) {
@@ -222,7 +226,9 @@ function onMouseMovement(e) {
 
 
 function gameOver() {
+    timetrial = false;
     timerOn = false;
+    lose = false;
     canvasElement.style.backgroundColor = "grey";
     enemy.color = "black";
     food.color = "lightgrey";
@@ -231,6 +237,8 @@ function gameOver() {
     enemy.draw();
     food.draw();
     player.draw();
+    timetrialButton.style.display = "block";
+    timetrialButton.addEventListener("click", timetrialButtonClicked);
     canvasElement.addEventListener("click", onMouseClick);
     text.textContent = "click to restart"
 }
@@ -244,6 +252,8 @@ function normalize2d(x, y) {
 }
 
 function onMouseClick() {
+    timetrialButton.style.display = "none";
+    timetrialButton.removeEventListener("click", timetrialButtonClicked);
     text.textContent = "";
     enemy.x = 100;
     enemy.y = 100;
@@ -265,15 +275,24 @@ function onMouseClick() {
     bar.style.width = "1%";
     progress = 100 / playerColors.length;
 
-    tries++;
+    if(!timetrial) {
+        tries++;
 
-    canvasElement.removeEventListener("click", onMouseClick);
-    if(tries === 1) {
-        food.x = 100;
-        food.y = 480;
-        enemy.x = 700;
-        enemy.y = 580;
-        requestAnimationFrame(tutorial);
+        canvasElement.removeEventListener("click", onMouseClick);
+        if(tries === 1) {
+            food.x = 100;
+            food.y = 480;
+            enemy.x = 700;
+            enemy.y = 580;
+            requestAnimationFrame(tutorial);
+        }
+        else {
+            counter.textContent = tries;
+            startTime = new Date().getTime();
+            timeInterval = setInterval(getShowTime, 1);
+            timerOn = true;
+            requestAnimationFrame(gameLoop);
+        }
     }
     else {
         counter.textContent = tries;
@@ -282,6 +301,7 @@ function onMouseClick() {
         timerOn = true;
         requestAnimationFrame(gameLoop);
     }
+
 }
 function youWin() {
     timerOn = false;
@@ -452,8 +472,13 @@ function getShowTime() {
         milliseconds = (milliseconds < 100) ? (milliseconds < 10) ? "00" + milliseconds :  "0" + milliseconds : milliseconds;
 
         score = minutes + seconds + milliseconds;
-    
+
         timer.innerHTML = minutes + ':' + seconds + ':' + milliseconds;
+        if(timetrial) {
+            if(minutes == 02) {
+                lose = true;
+            }
+        }
     }
 }
 
@@ -462,4 +487,9 @@ function deleteScore() {
     highscore = getHighscore();
     highscoreElement.innerHTML = highscore.substring(0,2) + ":" + highscore.substring(2,4) + ":" + highscore.substring(4,7);
     highscore = 999999;
+}
+
+function timetrialButtonClicked() {
+    timetrial = true;
+    onMouseClick();
 }
