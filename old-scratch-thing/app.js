@@ -4,6 +4,8 @@ const counter = document.getElementById("counter");
 const progressbar = document.getElementById("progressBar");
 const bar = document.getElementById("bar");
 const timer = document.getElementById("timer");
+const highscoreElement = document.getElementById("highscore");
+const deleteButton = document.getElementById("clearscore");
 
 const c = canvasElement.getContext("2d");
 
@@ -33,11 +35,27 @@ let foodVelocity = { x: 0, y: 0 };
 let prevTimestamp = 0;
 let deltaTime;
 
+let timerOn = false;
+let startTime;
+let updatedTime;
+let difference;
+let timeInterval;
+let minutes;
+let seconds;
+let milliseconds;
+
 let mouseX;
 let mouseY;
 
 let progress = 100 / playerColors.length;
 
+let score;
+let highscore = getHighscore();
+console.log(localStorage);
+highscoreElement.innerHTML = highscore.substring(0,2) + ":" + highscore.substring(2,4) + ":" + highscore.substring(4,7);
+highscore = 999999;
+
+deleteButton.addEventListener("click", deleteScore);
 canvasElement.addEventListener("click", onMouseClick);
 canvasElement.addEventListener("mousemove", onMouseMovement);
 
@@ -46,6 +64,8 @@ function gameLoop(timestamp) {
     deltaTime = timestamp - prevTimestamp;
     prevTimestamp = timestamp;
     deltaTime = Math.min(0.1, deltaTime);
+
+    timeInterval = setInterval(getShowTime, 1);
 
     player.x = mouseX;
     player.y = mouseY;
@@ -186,6 +206,15 @@ function gameLoop(timestamp) {
     }
 }
 
+function getHighscore() {
+    if(localStorage.getItem("prevHighscore") === null) {
+        return "0000000";
+    }
+    else {
+        return localStorage.getItem("prevHighscore");
+    }
+}
+
 function onMouseMovement(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
@@ -193,6 +222,7 @@ function onMouseMovement(e) {
 
 
 function gameOver() {
+    timerOn = false;
     canvasElement.style.backgroundColor = "grey";
     enemy.color = "black";
     food.color = "lightgrey";
@@ -247,13 +277,23 @@ function onMouseClick() {
     }
     else {
         counter.textContent = tries;
+        startTime = new Date().getTime();
+        timeInterval = setInterval(getShowTime, 1);
+        timerOn = true;
         requestAnimationFrame(gameLoop);
     }
 }
 function youWin() {
+    timerOn = false;
+    
+    if(parseFloat(highscore) > parseFloat(score)) {     
+        highscore = score;
+        localStorage.setItem("prevHighscore", highscore);
+        highscore = highscore.toString();
+        highscoreElement.innerHTML = highscore.substring(0,2) + ":" + highscore.substring(2,4) + ":" + highscore.substring(4,7);
+    }   
+
     text.textContent = "YOU WON!";
-    currentTime = new Date();
-    startTime = currentTime.getTime();
     canvasElement.addEventListener("click", onMouseClick);
 }
 
@@ -387,10 +427,39 @@ function tutorial(timestamp) {
         progress = 100 / playerColors.length;
 
         counter.textContent = tries;
+        startTime = new Date().getTime();
+        timerOn = true;
+        timeInterval = setInterval(getShowTime, 1);
 
         requestAnimationFrame(gameLoop);
     }
     else {
         requestAnimationFrame(tutorial);
     }
+}
+
+function getShowTime() {
+    if(timerOn) {
+        updatedTime = new Date().getTime();
+        difference = updatedTime - startTime;
+    
+        minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        milliseconds = Math.floor((difference % (1000 * 60)) / 100);
+    
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+        milliseconds = (milliseconds < 100) ? (milliseconds < 10) ? "00" + milliseconds :  "0" + milliseconds : milliseconds;
+
+        score = minutes + seconds + milliseconds;
+    
+        timer.innerHTML = minutes + ':' + seconds + ':' + milliseconds;
+    }
+}
+
+function deleteScore() {
+    localStorage.clear();
+    highscore = getHighscore();
+    highscoreElement.innerHTML = highscore.substring(0,2) + ":" + highscore.substring(2,4) + ":" + highscore.substring(4,7);
+    highscore = 999999;
 }

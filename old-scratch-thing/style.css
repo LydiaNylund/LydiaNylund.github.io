@@ -1,8 +1,24 @@
 body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+.page {
+    display: flex;
+    justify-content: flex-end;
+}
+.game {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.scoreboard {
+    margin-right: 7rem;
+    margin-left: 4rem;
+    margin-top: 3rem;
+}
+
 #text {
     position: absolute;
     font-size: 4rem;
@@ -27,4 +43,11 @@ body {
     width: 0%;
     height: 0.5rem;
     border-radius: 1rem;
+}
+#timer {
+    position: absolute;
+    top: 4rem;
+}
+#highscore {
+    font-size: 2rem;
 }
